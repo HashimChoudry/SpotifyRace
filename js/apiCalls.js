@@ -14,11 +14,10 @@ async function getToken(){
             body:body
         });
         const data = await response.json();
-        console.log(data)
         if (data.access_token) {
-            console.log("Access token: ", data.access_token);
             document.cookie =  `access_token=${data.access_token}; path=/; max-age=3600`;
-            document.getElementById("container-text").textContent="token Loaded"
+            console.log(getCookie('access_token'))
+            document.getElementById('container-text').textContent = 'Token gotten';
         } else {
             console.error("Error fetching token");
             document.getElementById("container-text").textContent = "Error fetching token";
@@ -28,4 +27,18 @@ async function getToken(){
     }
 }
 
+function getCookie(cookieName) {
+    let cookieVal = decodeURI(document.cookie);
+    let cookieArr = cookieVal.split(';');
+    cookieName = cookieName+'='
+    for(i=0; i < cookieArr.length;i++){
+        let cookie = cookieArr[i].trim()
+        if( cookie.substring(0,cookieName.length) === cookieName){
+            return cookie.slice(cookieName.length)
+        }
+    }
+    return ""
+}
+
 window.addEventListener("load",getToken);
+
